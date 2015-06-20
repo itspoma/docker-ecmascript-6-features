@@ -1,9 +1,14 @@
 #!/bin/bash -e
 
+# clean up the es6 container if it present
 docker rm -f es6 >/dev/null 2>&1
 
+# run the container based on io.js v2,
+# and mount current directory to /shared
 docker run -d --name es6 -v $PWD:/shared -it iojs:2
 
+# run the tests inside of container,
+# with enabled ES6 features (Harmony)
 docker exec -ti es6 \
     find ./shared/es6-tests/ -name "*.js" \
       -exec echo ">> {}" \;\
@@ -32,4 +37,5 @@ docker exec -ti es6 \
         {} \;\
       -exec echo "" \;
 
+# stop and remove the container
 docker rm -f es6 >/dev/null 2>&1
